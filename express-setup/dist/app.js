@@ -10,11 +10,17 @@ const app = (0, express_1.default)();
 // middleware
 app.use(express_1.default.json());
 app.use(express_1.default.text());
-app.get('/', (req, res) => {
-    res.send('Hello  server mama');
+const logger = (req, res, next) => {
+    console.log(req.url, req.method, req.hostname);
+    next();
+};
+app.get('/', logger, (req, res) => {
+    res.json({
+        name: 'next level web development'
+    });
 });
-app.post('/', (req, res) => {
+app.post('/', logger, (req, res) => {
     console.log(req.body);
-    res.send('another response');
+    res.send('Hello  server mama');
 });
 exports.default = app;
