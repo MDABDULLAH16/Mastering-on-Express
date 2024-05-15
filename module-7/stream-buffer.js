@@ -1,13 +1,29 @@
+const http = require('http');
+const server = http.createServer();
+const fs = require('fs');
+const { buffer } = require('stream/consumers');
 
-const EventEmitter = require('events');
+server.on('request', (req, res) => {
+    if (req.url === '/read-file' && req.method === 'GET');
 
-const MyEventEmitter = new EventEmitter();
+    //streaming
 
-MyEventEmitter.on('birthday', () => {
-    console.log('happy birth day to you');
+    const readableStream = fs.createReadStream(process.cwd() + '/text/read.txt');
+
+    //for buffer
+    readableStream.on('data', (buffer) => {
+        res.write(buffer)
+    })
+
+    //ses howar por
+    readableStream.on('end', () => {        
+        res.end('Hello From World')
+    })
+
+    
+
 });
-MyEventEmitter.on('birthday',(gift)=> {
-    console.log(`I will sent you a ${gift}`)
-})
 
-MyEventEmitter.emit('birthday','watch')
+server.listen(5000, () => {
+    console.log('server on running');
+})
